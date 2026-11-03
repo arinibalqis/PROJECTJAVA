@@ -324,3 +324,319 @@ Repository berisi source code Java, README, dan dokumentasi yang diperlukan sesu
 TP3 ini menghasilkan fondasi awal project Character Manager menggunakan bahasa pemrograman Java. Program telah menerapkan class, object, constructor, encapsulation, enum, getter dan setter, serta beberapa method untuk mengatur perilaku karakter.
 
 Selain fitur dasar, project juga telah dikembangkan dengan atribut `mana` dan method `isAlive()`. Dengan struktur package yang terorganisasi, project ini dapat dilanjutkan ke tahap pengembangan berikutnya tanpa harus mengubah keseluruhan struktur program.
+
+# Character Manager — TP5 (Java Visual SIH-6406)
+
+## Deskripsi
+
+Project ini merupakan pengembangan **Character Manager Sprint #2** pada mata kuliah Java Visual (SIH-6406). Pada TP5, program dikembangkan dengan menambahkan class `CharacterManager` untuk mengelola data karakter menggunakan `ArrayList`, serta menerapkan konsep **encapsulation, reference, object comparison, defensive copy, dan static counter**.
+
+Selain fitur dasar pengelolaan karakter, program juga memiliki fitur pencarian berdasarkan nama dan tipe karakter, penghapusan karakter, perhitungan jumlah karakter, rata-rata level, serta fitur analitik tambahan.
+
+---
+
+## Fitur TP5
+
+Beberapa fitur yang telah diimplementasikan dalam project ini:
+
+- Menambahkan karakter menggunakan `addCharacter()`
+- Mencari karakter berdasarkan nama menggunakan `findByName()`
+- Menghapus karakter menggunakan `removeCharacter()`
+- Menghitung jumlah karakter menggunakan `getTotalCharacters()`
+- Mengambil seluruh karakter menggunakan `getAllCharacters()`
+- Menolak penambahan karakter dengan nama yang sama
+- Membandingkan karakter berdasarkan nama menggunakan `equals()`
+- Menghitung rata-rata level menggunakan `getAverageLevel()`
+- Mencari karakter berdasarkan `CharacterType` menggunakan `findByType()`
+- Menggunakan defensive copy pada `getAllCharacters()`
+- Menggunakan `static totalCharacterCreated` untuk menghitung jumlah karakter yang pernah dibuat
+- Menambahkan fitur analitik `findStrongest()` untuk mencari karakter dengan level tertinggi
+
+---
+
+## Struktur Project
+
+```text
+PROJECTJAVA/
+│
+├── out/
+│
+├── src/
+│   └── com/
+│       └── unpri/
+│           └── charactermanager/
+│               │
+│               ├── Main.java
+│               │
+│               └── model/
+│                   ├── Character.java
+│                   ├── CharacterManager.java
+│                   └── CharacterType.java
+│
+├── screenshots/
+│   └── output terminal TP5.png
+│
+└── README.md
+```
+
+---
+
+## CharacterManager
+
+Class `CharacterManager` digunakan untuk mengelola kumpulan object `Character`. Data karakter disimpan menggunakan `ArrayList<Character>`.
+
+Method utama yang tersedia:
+
+```java
+addCharacter()
+findByName()
+removeCharacter()
+getTotalCharacters()
+getAllCharacters()
+getAverageLevel()
+findByType()
+findStrongest()
+```
+
+Program juga melakukan pengecekan nama sebelum karakter ditambahkan. Jika nama karakter sudah digunakan, karakter baru akan ditolak agar tidak terjadi data duplikat.
+
+---
+
+## Penolakan Nama Duplikat
+
+Program menggunakan method `equals()` pada class `Character` untuk membandingkan nama karakter.
+
+Contoh:
+
+```text
+=== ADD CHARACTER ===
+Arthur berhasil ditambahkan.
+Merlin berhasil ditambahkan.
+Robin berhasil ditambahkan.
+
+=== DUPLICATE TEST ===
+Nama karakter sudah digunakan.
+Hasil penambahan: false
+```
+
+Dengan demikian, dua karakter tidak dapat memiliki nama yang sama di dalam `CharacterManager`.
+
+---
+
+## Defensive Copy
+
+Method `getAllCharacters()` tidak mengembalikan `ArrayList` asli. Method tersebut mengembalikan salinan dari list.
+
+Tujuannya adalah menjaga **encapsulation** sehingga kode dari luar class tidak dapat mengubah langsung data internal `CharacterManager`.
+
+Contoh konsep:
+
+```java
+public ArrayList<Character> getAllCharacters() {
+    return new ArrayList<>(characters);
+}
+```
+
+Dengan cara tersebut, perubahan terhadap list hasil pengambilan tidak akan mengubah list asli yang berada di dalam `CharacterManager`.
+
+---
+
+## Mini-Challenge
+
+### 1. Average Level
+
+Method:
+
+```java
+getAverageLevel()
+```
+
+digunakan untuk menghitung rata-rata level seluruh karakter.
+
+Jika tidak terdapat karakter, method mengembalikan nilai:
+
+```text
+0.0
+```
+
+Hal tersebut dilakukan untuk menghindari pembagian dengan nol.
+
+### 2. Find By Type
+
+Method:
+
+```java
+findByType(CharacterType type)
+```
+
+digunakan untuk mencari semua karakter berdasarkan tipe tertentu seperti:
+
+```text
+WARRIOR
+MAGE
+ARCHER
+ASSASSIN
+```
+
+Hasil pencarian dikembalikan dalam bentuk `ArrayList<Character>`.
+
+---
+
+## Fitur Analitik Tambahan
+
+Fitur tambahan yang dibuat pada TP5 adalah:
+
+```java
+findStrongest()
+```
+
+Method ini digunakan untuk mencari karakter dengan **level tertinggi** di dalam `CharacterManager`.
+
+Fitur ini membantu pengguna mengetahui karakter yang memiliki level paling tinggi tanpa harus memeriksa seluruh data secara manual.
+
+Method ini juga menjaga encapsulation karena tidak memberikan akses langsung terhadap `ArrayList` internal.
+
+Contoh Javadoc:
+
+```java
+/**
+ * Mencari karakter dengan level tertinggi.
+ *
+ * @return karakter dengan level tertinggi,
+ *         atau null jika tidak ada karakter.
+ */
+public Character findStrongest() {
+    if (characters.isEmpty()) {
+        return null;
+    }
+
+    Character strongest = characters.get(0);
+
+    for (Character character : characters) {
+        if (character.getLevel() > strongest.getLevel()) {
+            strongest = character;
+        }
+    }
+
+    return strongest;
+}
+```
+
+---
+
+## Eksperimen Reference
+
+TP5 juga menguji konsep reference pada Java.
+
+Contoh:
+
+```java
+Character a = new Character(
+    10,
+    "Arthur",
+    5,
+    CharacterType.WARRIOR
+);
+
+Character b = a;
+
+b.setLevel(8);
+
+System.out.println(a.getLevel());
+System.out.println(a == b);
+```
+
+Output:
+
+```text
+8
+true
+```
+
+Hal tersebut terjadi karena `a` dan `b` menunjuk ke object yang sama di memory. Ketika `b` mengubah level, perubahan tersebut juga terlihat melalui `a`.
+
+Untuk membuat object yang benar-benar independen, diperlukan object baru menggunakan constructor atau mekanisme copy yang sesuai.
+
+---
+
+## Static Counter
+
+Class `CharacterManager` memiliki:
+
+```java
+private static int totalCharacterCreated;
+```
+
+Variabel tersebut digunakan untuk menghitung jumlah karakter yang telah dibuat secara keseluruhan.
+
+Karena bersifat `static`, variabel tersebut dimiliki bersama oleh seluruh object `CharacterManager`, bukan oleh satu object saja.
+
+Contoh output:
+
+```text
+=== STATIC COUNTER ===
+Total karakter yang pernah dibuat: 4
+```
+
+---
+
+## Screenshot Output
+
+Screenshot hasil program dapat dilihat pada folder:
+
+```text
+screenshots/output terminal TP5.png
+```
+
+Contoh output program mencakup:
+
+- Data karakter
+- Penambahan karakter
+- Pengujian nama duplikat
+- Pencarian karakter
+- Penghapusan karakter
+- Average level
+- Find by type
+- Eksperimen reference
+- Fitur findStrongest()
+- Static counter
+
+![Output Terminal TP5](screenshots/output%20terminal%20TP5.png)
+
+---
+
+## Dokumentasi Google Docs
+
+Analisis Bagian D mengenai **Reference & Rancangan** dibuat pada Google Docs.
+
+**Nama:** Arini Balqis  
+**NIM:** 253303621263  
+**Kelas:** 3 Pagi B  
+**Mata Kuliah:** Java Visual (SIH-6406)
+
+**Link Google Docs:**  
+`MASUKKAN LINK GOOGLE DOCS DI SINI`
+
+Pastikan akses Google Docs sudah diatur menjadi:
+
+**Anyone with the link — Viewer**
+
+---
+
+## Teknologi
+
+Project ini dibuat menggunakan:
+
+- Bahasa pemrograman: **Java**
+- JDK: **JDK 17 / 21**
+- IDE: **Visual Studio Code**
+- Version Control: **Git**
+- Repository: **GitHub**
+
+---
+
+## Kesimpulan TP5
+
+TP5 mengembangkan project Character Manager dari tahap dasar menjadi program yang mampu mengelola sekumpulan object karakter. Implementasi `CharacterManager` memperkenalkan pengelolaan data menggunakan `ArrayList`, pencarian, penghapusan, validasi nama duplikat, perhitungan statistik, serta fitur analitik tambahan.
+
+Melalui TP5, konsep Java seperti **reference, primitive value, `equals()`, `static`, encapsulation, dan defensive copy** juga diterapkan secara langsung dalam kode. Dengan demikian, project tidak hanya berfokus pada program yang dapat berjalan, tetapi juga memahami alasan desain dan perilaku object dalam Java.

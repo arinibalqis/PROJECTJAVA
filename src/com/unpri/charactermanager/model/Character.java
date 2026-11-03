@@ -1,5 +1,7 @@
 package com.unpri.charactermanager.model;
 
+import java.util.Objects;
+
 public class Character {
 
     private int id;
@@ -10,7 +12,6 @@ public class Character {
     private int attack;
     private int mana;
 
-    // Constructor 1
     public Character(int id, String name, int level, CharacterType type) {
         this.id = id;
         this.name = name;
@@ -19,12 +20,10 @@ public class Character {
         updateStats();
     }
 
-    // Constructor 2
     public Character(int id, String name, CharacterType type) {
         this(id, name, 1, type);
     }
 
-    // Getter dan Setter
     public int getId() {
         return id;
     }
@@ -69,7 +68,9 @@ public class Character {
 
     public void setHitPoints(int hitPoints) {
         if (hitPoints < 0) {
-            throw new IllegalArgumentException("Hit points tidak boleh negatif.");
+            throw new IllegalArgumentException(
+                    "Hit points tidak boleh negatif."
+            );
         }
 
         this.hitPoints = hitPoints;
@@ -81,7 +82,9 @@ public class Character {
 
     public void setAttack(int attack) {
         if (attack < 0) {
-            throw new IllegalArgumentException("Attack tidak boleh negatif.");
+            throw new IllegalArgumentException(
+                    "Attack tidak boleh negatif."
+            );
         }
 
         this.attack = attack;
@@ -93,27 +96,49 @@ public class Character {
 
     public void setMana(int mana) {
         if (mana < 0) {
-            throw new IllegalArgumentException("Mana tidak boleh negatif.");
+            throw new IllegalArgumentException(
+                    "Mana tidak boleh negatif."
+            );
         }
 
         this.mana = mana;
     }
 
-    // Level up
     public void levelUp() {
         level++;
         updateStats();
     }
 
-    // Menentukan status karakter
     public boolean isAlive() {
         return hitPoints > 0;
     }
 
-    // Menghitung ulang statistik karakter
     private void updateStats() {
         hitPoints = 100 + (level * 10);
         attack = 10 + (level * 5);
+    }
+
+    /*
+     * Dua Character dianggap sama jika memiliki nama yang sama.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof Character)) {
+            return false;
+        }
+
+        Character other = (Character) object;
+
+        return Objects.equals(this.name, other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override
