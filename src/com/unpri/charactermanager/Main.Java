@@ -14,7 +14,6 @@ public class Main {
 
         CharacterManager manager = new CharacterManager();
 
-        // Karakter awal
         manager.addCharacter(
                 new Character(1, "Arthur", 20, CharacterType.WARRIOR)
         );
@@ -27,7 +26,6 @@ public class Main {
                 new Character(3, "Robin", 18, CharacterType.ARCHER)
         );
 
-        // Karakter tambahan TP8
         manager.addCharacter(
                 new Character(4, "Luna", 22, CharacterType.SUPPORT)
         );
@@ -36,7 +34,10 @@ public class Main {
                 new Character(5, "Arjuna", 25, CharacterType.WARRIOR)
         );
 
-        // Menjalankan GUI pada Event Dispatch Thread
+        manager.addCharacter(
+                new Character(6, "Nadia", 1, CharacterType.SUPPORT)
+        );
+
         SwingUtilities.invokeLater(() -> {
             MainWindow window = new MainWindow(manager);
             window.setVisible(true);
